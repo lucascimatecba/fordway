@@ -1,1 +1,34 @@
-<p>header works!</p>
+<!-- Barra de navegação superior com botão de menu e logout -->
+<nav class="navbar">
+  <div class="container-fluid">
+    <button class="navbar-toggler me-auto" type="button" (click)="toggleMenu()" aria-controls="sidebarMenu" [attr.aria-expanded]="isMenuOpen ? 'true' : 'false'" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <button class="btn btn-outline-danger logout-btn d-flex align-items-center gap-2" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Sair</span>
+  </button>
+  </div>
+</nav>
+
+<!-- Menu lateral com links de navegação -->
+<div class="sidebar-menu" [class.active]="isMenuOpen" id="sidebarMenu">
+
+  <div class="sidebar-header">
+    <button type="button" class="btn-close" aria-label="Close" (click)="toggleMenu()"></button>
+  </div>
+
+  <div class="sidebar-logo-container">
+    <img src="../../../assets/ford.png" alt="Logo Ford" class="sidebar-logo">
+  </div>
+
+  <ul class="list-unstyled components">
+    <li><a routerLink="/home" (click)="toggleMenu()">Home</a></li>
+    <li><a routerLink="/dashboard" (click)="toggleMenu()">Dashboard</a></li>
+  </ul>
+</div>
+
+<!-- Sobreposição para fechar o menu ao clicar fora -->
+<div class="overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+
