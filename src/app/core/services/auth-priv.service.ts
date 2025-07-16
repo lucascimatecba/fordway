@@ -4,6 +4,22 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthPrivService {
+  private readonly STORAGE_KEY = 'usuarioLogado';
 
-  constructor() { }
+  setUsuario(usuario: any): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuario));
+  }
+
+  getUsuario(): any {
+    const usuario = localStorage.getItem(this.STORAGE_KEY);
+    return usuario ? JSON.parse(usuario) : null;
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
+
+  estaLogado(): boolean {
+    return !!this.getUsuario();
+  }
 }
