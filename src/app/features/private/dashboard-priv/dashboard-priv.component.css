@@ -1,0 +1,89 @@
+.table-responsive {
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.custom-title-table,
+.custom-title-table th {
+  background-color: var(--cor-azul-dashboard);
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+}
+.custom-title-table td {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.custom-card {
+  border: 1px solid #a9aaaa;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.custom-card:hover {
+  transform: scale(1.02);
+}
+
+.custom-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--cor-fonte-sec-dashboard);
+}
+
+.custom-number {
+  font-size: 25px;
+  font-weight: 600;
+  color: var(--cor-azul-dashboard);
+}
+
+.custom-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cor-fonte-sec-dashboard);
+}
+
+.form-select {
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.img-custom {
+    max-height: 420px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+@media (max-width: 768px) {
+  .custom-title {
+    font-size: 17px;
+  }
+
+  .custom-text {
+    font-size: 14px;
+  }
+
+  .custom-number {
+    font-size: 23px;
+  }
+
+  .form-select {
+    font-size: 14px;
+    text-align: start;
+  }
+
+  option:disabled {
+    color: #a0a0a0;
+  }
+}
+
+@media (min-width: 992px) {
+  .table-responsive table {
+    min-height: 100px;
+  }
+  .img-fluid {
+    max-height: 420px;
+    object-fit: contain;
+  }
+
+}

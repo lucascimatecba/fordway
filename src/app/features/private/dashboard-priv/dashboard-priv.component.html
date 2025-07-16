@@ -1,1 +1,120 @@
-<p>dashboard-priv works!</p>
+<!-- Container principal da página do Dashboard -->
+<div class="container-fluid d-flex flex-column px-4">
+  <h2 class="text-primary fw-bold text-center pb-3 mb-4 fs-3 custom">Dashboard FORD</h2>
+
+  <!-- Card com select de veículos -->
+  <div class="row justify-content-center g-3 mb-4 flex-wrap">
+    <div class="col-6 col-md-3">
+      <div class="card custom-card h-100">
+        <div class="card-header text-center">
+          <h3 class="custom-title pt-3">Veículo</h3>
+        </div>
+        <!-- Formulário reativo para selecionar veículo -->
+        <form [formGroup]="selectCarForms">
+          <div class="card-body d-flex align-items-center justify-content-center">
+            <select
+              class="form-select w-100 mt-2 text-center"
+              formControlName="carId"
+            >
+              <option value="" disabled selected>Selecione</option>
+              <option *ngFor="let v of vehicles" [value]="v.id">
+                {{ v.vehicle }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cards de Vendas / Conectados / Atualizados -->
+    <div class="col-6 col-md-3" *ngFor="let card of cards">
+      <div class="card custom-card h-100">
+        <div class="card-header text-center">
+          <h3 class="custom-title pt-3">{{ card.titulo }}</h3>
+        </div>
+        <div class="card-body">
+          <h5 class="custom-number text-center">{{ card.valor }}</h5>
+          <p class="custom-text text-center">Unid.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagem do veículo selecionado e imagem padrão do Mustang) -->
+    <div class="text-center mb-1 pt-1">
+      <ng-container *ngIf="selectedVehicle; else mustangDefault">
+        <img [src]="selectedVehicle.img" alt="Imagem do Veículo" class="img-fluid" />
+      </ng-container>
+      <ng-template #mustangDefault>
+        <img src="../../assets/logo-ford-dashboard.png" alt="Imagem Mustang" class="img-custom"/>
+      </ng-template>
+    </div>
+
+    <!-- Campo de busca -->
+    <form [formGroup]="vinForm" class="row justify-content-center mb-3">
+      <div class="col-12">
+        <div class="input-group">
+          <span class="input-group-text custom-title-table text-white">
+            <mat-icon>search</mat-icon>
+          </span>
+          <input
+            formControlName="vin"
+            type="text"
+            class="form-control"
+            placeholder="Digite o código VIN"
+          />
+        </div>
+
+        <!-- Mensagem de VIN inválido -->
+        <div class="text-danger mt-2 text-center" *ngIf="vinInvalido">
+          VIN não encontrado!
+        </div>
+      </div>
+    </form>
+
+    <!-- Tabela desktop -->
+    <div class="mt-1">
+      <div class="table-responsive d-none d-lg-block">
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead class="custom-title-table">
+            <tr>
+              <th>VIN</th>
+              <th>Odômetro</th>
+              <th>Combustível</th>
+              <th>Status</th>
+              <th>Lat.</th>
+              <th>Long.</th>
+            </tr>
+          </thead>
+          <tbody class="custom-title-table">
+            <tr>
+              <td>{{ vinForm.controls.vin.value || '-' }}</td>
+              <td>{{ vehicleData ? vehicleData.odometro : '-' }}</td>
+              <td>{{ vehicleData ? vehicleData.nivelCombustivel + '%' : '-' }}</td>
+              <td>{{ vehicleData ? vehicleData.status : '-' }}</td>
+              <td>{{ vehicleData ? vehicleData.lat : '-' }}</td>
+              <td>{{ vehicleData ? vehicleData.long : '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cartelas mobile -->
+      <div class="d-lg-none">
+        <div class="border rounded p-4 pb-0 bg-white text-center">
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Código - VIN</p>
+          <p>{{ vinForm.controls.vin.value || '-' }}</p>
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Odômetro</p>
+          <p>{{ vehicleData ? vehicleData.odometro : '-' }}</p>
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Nível de Combustível</p>
+          <p>{{ vehicleData ? vehicleData.nivelCombustivel + '%' : '-' }}</p>
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Status</p>
+          <p>{{ vehicleData ? vehicleData.status : '-' }}</p>
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Lat.</p>
+          <p>{{ vehicleData ? vehicleData.lat : '-' }}</p>
+          <p class="fw-bold text-white custom-title-table px-2 py-1 rounded">Long.</p>
+          <p>{{ vehicleData ? vehicleData.long : '-' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
