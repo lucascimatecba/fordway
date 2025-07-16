@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "./shared/header/header.component";
+import { RouterOutlet } from "@angular/router";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CommonModule, HeaderComponent, RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'fordway';
+export class AppComponent implements OnInit {
+  showHeader$ = new BehaviorSubject<boolean>(true);
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.router.events.pipe(
+      filter((event: RouterEvent): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      const currentUrl = event.urlAfterRedirects;
+      this.showHeader$.next(!currentUrl.includes('/login'));
+    });
+  }
 }
