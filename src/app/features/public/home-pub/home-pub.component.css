@@ -1,0 +1,34 @@
+.car-image {
+  width: 100%;
+  object-fit: cover;
+}
+
+.car-title {
+  min-height: 2.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.hero-banner {
+  background-image: url('assets/ford-banner2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 60vh; /* ajuste conforme desejar */
+  min-height: 350px;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* escurece o fundo para legibilidade */
+  z-index: 1;
+}
+
+.hero-banner .container {
+  z-index: 2;
+  position: relative;
+}
