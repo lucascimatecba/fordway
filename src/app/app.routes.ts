@@ -7,11 +7,13 @@ import { loginPrivGuard } from './core/guards/login-priv.guard';
 import { HomePubComponent } from './features/public/home-pub/home-pub.component';
 import { QuizPubComponent } from './features/public/quiz-pub/quiz-pub.component';
 import { ComparePubComponent } from './features/public/compare-pub/compare-pub.component';
+import { TestdrivePubComponent } from './features/public/testdrive-pub/testdrive-pub.component';
+import { authPubGuard } from './core/guards/auth-pub.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
@@ -31,15 +33,23 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomePubComponent
+    component: HomePubComponent,
+    canActivate: [authPubGuard]
   },
   {
     path: 'seu-ford',
-    component: QuizPubComponent
+    component: QuizPubComponent,
+    canActivate: [authPubGuard]
   },
   {
     path: 'comparacao',
-    component: ComparePubComponent
+    component: ComparePubComponent,
+    canActivate: [authPubGuard]
+  },
+  {
+    path: 'test-drive',
+    component: TestdrivePubComponent,
+    canActivate: [authPubGuard]
   },
   {
     path: '**',

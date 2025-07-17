@@ -6,9 +6,7 @@ export const authPrivGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthPrivService);
   const router = inject(Router);
 
-  if(authService.estaLogado()) {
-    return true;
-  } else {
-    return router.createUrlTree(['/login'])
-  }
+  return authService.estaLogado()
+    ? true
+    : router.createUrlTree(['/login']);
 };
