@@ -5,4 +5,5 @@
   <div class="main-content-wrapper">
     <router-outlet></router-outlet>
   </div>
+  <app-footer-pub *ngIf="showFooter$ | async"></app-footer-pub>
 </div>
