@@ -5,6 +5,8 @@ import { DashboardPrivComponent } from './features/private/dashboard-priv/dashbo
 import { authPrivGuard } from './core/guards/auth-priv.guard';
 import { loginPrivGuard } from './core/guards/login-priv.guard';
 import { HomePubComponent } from './features/public/home-pub/home-pub.component';
+import { QuizPubComponent } from './features/public/quiz-pub/quiz-pub.component';
+import { ComparePubComponent } from './features/public/compare-pub/compare-pub.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +32,14 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomePubComponent
+  },
+  {
+    path: 'seu-ford',
+    component: QuizPubComponent
+  },
+  {
+    path: 'comparacao',
+    component: ComparePubComponent
   },
   {
     path: '**',
