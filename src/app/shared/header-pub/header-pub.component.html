@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <!-- Logo da Ford -->
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/ford.png" alt="Logo Ford" width="100" />
+    </a>
+
+    <!-- Botão hamburger -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarPublic"
+      aria-controls="navbarPublic"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Itens de navegação -->
+    <div class="collapse navbar-collapse" id="navbarPublic">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-2 w-100 justify-content-lg-end text-center text-lg-start">
+        <li class="nav-item border-top d-lg-none py-2">
+          <a class="nav-link fw-bold hover-link" routerLink="/seu-ford">Seu Ford</a>
+        </li>
+        <li class="nav-item border-top d-lg-none py-2">
+          <a class="nav-link fw-bold hover-link" routerLink="/comparacao">Compare</a>
+        </li>
+        <li class="nav-item border-top border-bottom d-lg-none py-2">
+          <a class="nav-link fw-bold hover-link" routerLink="/login">Colaborador</a>
+        </li>
+
+        <!-- Versão desktop (botões) -->
+        <li class="nav-item d-none d-lg-block">
+          <a class="btn btn-primary" routerLink="/seu-ford">Seu Ford</a>
+        </li>
+        <li class="nav-item d-none d-lg-block">
+          <a class="btn btn-primary" routerLink="/comparacao">Compare</a>
+        </li>
+        <li class="nav-item d-none d-lg-block">
+          <a class="btn btn-secondary" routerLink="/login">Colaborador</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
