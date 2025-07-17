@@ -1,3 +1,8 @@
+:root {
+  --cor-fonte-sec-dashboard: #777777;
+  --cor-azul-dashboard: #3780eefb;
+}
+
 * {
   font-family: 'Poppins', sans-serif;
 }
