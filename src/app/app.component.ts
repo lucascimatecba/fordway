@@ -3,13 +3,13 @@ import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "./shared/header/header.component";
+import { HeaderPrivComponent } from "./shared/header-priv/header-priv.component";
 import { RouterOutlet } from "@angular/router";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, RouterOutlet],
+  imports: [CommonModule, HeaderPrivComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

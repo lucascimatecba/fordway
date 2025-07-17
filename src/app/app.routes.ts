@@ -4,6 +4,7 @@ import { LoginPrivComponent } from './features/private/login-priv/login-priv.com
 import { DashboardPrivComponent } from './features/private/dashboard-priv/dashboard-priv.component';
 import { authPrivGuard } from './core/guards/auth-priv.guard';
 import { loginPrivGuard } from './core/guards/login-priv.guard';
+import { HomePubComponent } from './features/public/home-pub/home-pub.component';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,7 @@ export const routes: Routes = [
     canActivate: [loginPrivGuard]
   },
   {
-    path: 'home',
+    path: 'home-priv',
     component: HomePrivComponent,
     canActivate: [authPrivGuard]
   },
@@ -25,6 +26,10 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardPrivComponent,
     canActivate: [authPrivGuard]
+  },
+  {
+    path: 'home',
+    component: HomePubComponent
   },
   {
     path: '**',

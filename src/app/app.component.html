@@ -1,6 +1,6 @@
 <!-- Estrutura principal do app, com cabeçalho e área de rotas -->
 <div class="app-container">
-  <app-header *ngIf="showHeader$ | async"></app-header>
+  <app-header-priv *ngIf="showHeader$ | async"></app-header-priv>
   <div class="main-content-wrapper">
     <router-outlet></router-outlet>
   </div>
