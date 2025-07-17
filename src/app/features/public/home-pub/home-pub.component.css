@@ -1,34 +1,100 @@
-.car-image {
-  width: 100%;
-  object-fit: cover;
-}
-
-.car-title {
-  min-height: 2.5rem;
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
+/* Hero banner */
 .hero-banner {
   background-image: url('../../../../assets/ford-banner2.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 60vh; /* ajuste conforme desejar */
+  height: 60vh;
   min-height: 350px;
   padding: 2rem;
   position: relative;
 }
-
 .hero-banner::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* escurece o fundo para legibilidade */
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
-
 .hero-banner .container {
   z-index: 2;
   position: relative;
 }
+
+/* Imagens dos veículos */
+.car-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Card dos veículos */
+.vehicle-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.vehicle-card:hover {
+  transform: scale(1.02);
+}
+
+.vehicle-card h5 {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* Cortina de hover */
+.vehicle-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(10, 35, 90, 0.85);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 10px;
+}
+
+.vehicle-card:hover .vehicle-overlay {
+  opacity: 1;
+}
+
+.overlay-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+@media (max-width: 1199px) {
+  .car-image {
+    height: 150px;
+  }
+
+  .overlay-text {
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 575px) {
+  .vehicle-card {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70%;
+  }
+
+  .car-image {
+    height: auto;         /* Remove altura fixa */
+    object-fit: contain;  /* Mostra a imagem toda, sem cortar */
+  }
+}
+
