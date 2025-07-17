@@ -42,6 +42,10 @@ export class LoginPrivComponent {
     });
   }
 
+  voltarHome() {
+    this.router.navigate(['/home']);
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       const {nome, senha} = this.loginForm.value;
@@ -49,7 +53,7 @@ export class LoginPrivComponent {
       this.loginService.login(nome, senha).subscribe({
         next: (usuario) => {
           this.authService.setUsuario(usuario);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home-priv']);
         },
         error: (err) => {
           this.mensagemErro = err.error?.message || 'Erro ao fazer login';

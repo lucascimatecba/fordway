@@ -1,5 +1,10 @@
 <!-- Layout principal do login com imagem à esquerda e formulário à direita -->
 <div class="container-fluid text-center">
+  <div class="position-absolute top-0 end-0 m-3">
+    <button mat-icon-button aria-label="Fechar login" (click)="voltarHome()" class="text-secondary">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
   <div class="row d-flex flex-column flex-lg-row min-vh-100 justify-content-center">
 
     <!-- Imagem do veículo (visível em telas grandes) -->
