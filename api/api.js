@@ -6,6 +6,10 @@ const app = express();
 
 app.use(cors());
 // app.use(express.urlencoded({ extended: true }));
+const colaboradores = [];
+
+const codigosValidos = ["FORD123456", "FORD789012", "FORD987654"];
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname)));
@@ -165,6 +169,62 @@ app.post("/vehicleData", (req, res) => {
         });
     }
 })
+
+app.post("/colaboradores", (req, res) => {
+  try {
+    const { nome, codigoChave, email, senha } = req.body;
+
+    if (!nome || !codigoChave || !email || !senha) {
+      return res.status(400).json({ message: "Todos os campos são obrigatórios." });
+    }
+
+    if (!codigosValidos.includes(codigoChave)) {
+      return res.status(401).json({ message: "Código-chave inválido." });
+    }
+
+    const nomeJaExiste = colaboradores.find(c => c.nome === nome);
+    const emailJaExiste = colaboradores.find(c => c.email === email);
+
+    if (nomeJaExiste || emailJaExiste) {
+      return res.status(409).json({ message: "Usuário ou e-mail já cadastrado." });
+    }
+
+    const novoColaborador = {
+      id: colaboradores.length + 1,
+      nome,
+      codigoChave,
+      email,
+      senha
+    };
+
+    colaboradores.push(novoColaborador);
+
+    return res.status(201).json({
+      message: "Colaborador cadastrado com sucesso!",
+      colaborador: novoColaborador
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erro interno no servidor",
+      error: String(error)
+    });
+  }
+});
+
+app.get("/colaboradores/checar-nome", (req, res) => {
+  const { nome } = req.query;
+
+  const existe = colaboradores.some(c => c.nome === nome);
+  return res.status(200).json(existe);
+});
+
+app.get("/colaboradores/checar-email", (req, res) => {
+  const { email } = req.query;
+
+  const existe = colaboradores.some(c => c.email === email);
+  return res.status(200).json(existe);
+});
 
 app.listen(3001, () => {
     console.log("API running on http://localhost:3001/");
