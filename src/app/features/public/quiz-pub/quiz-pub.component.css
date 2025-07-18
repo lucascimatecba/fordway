@@ -1,19 +1,125 @@
-html, body {
+/* Container centralizado vertical e horizontalmente na tela inteira */
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 145px);
+  background-color: #f0f0f03c;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.quiz-container {
+  max-width: 500px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem 2rem 3rem;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.start-screen, .question-screen, .result-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+h1, h2 {
+  color: #2c3e50;
   margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden; /* evitar scroll, ajustar se header/footer tiver */
 }
 
-.container {
-  height: 100vh;
+p {
+  color: #555;
+  margin: 0;
 }
 
-.border-primary {
-  border-width: 2px !important;
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
-.btn:disabled {
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.options button {
+  padding: 0.8rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.options button.selected {
+  background-color: var(--cor-azul-botoes);
+  color: #fff;
+  border-color: var(--cor-azul-botoes);
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.navigation-buttons button,
+.result-screen button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--cor-azul-botoes);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  user-select: none;
+}
+
+.navigation-buttons button:disabled {
+  background-color: #aaa;
   cursor: not-allowed;
-  opacity: 0.6;
+}
+
+.navigation-buttons button:hover:not(:disabled),
+.result-screen button:hover {
+  background-color: #053261;
+}
+
+.placeholder {
+  font-style: italic;
+  color: #777;
+  margin: 1rem 0;
+}
+
+.resultado-imagem {
+  max-width: 60%;
+  height: auto;
+  border-radius: 12px;
+  margin: 1rem auto; /* centraliza horizontalmente */
+  display: block;    /* faz a imagem se comportar como bloco */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+/* Responsividade básica */
+@media (max-width: 400px) {
+  .quiz-container {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .options button {
+    font-size: 0.9rem;
+  }
 }

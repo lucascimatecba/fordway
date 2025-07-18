@@ -1,46 +1,41 @@
-<div class="quiz-container container vh-100 d-flex flex-column justify-content-center align-items-center">
-
-  <!-- Tela inicial -->
-  <div *ngIf="quizStep === 'start'" class="text-center p-4">
-    <h1 class="mb-3">Descubra o seu Ford ideal</h1>
-    <p class="mb-4">Responda algumas perguntas para encontrarmos o veículo perfeito para você!</p>
-    <button class="btn btn-primary btn-lg" (click)="proximo()">Começar</button>
+<div class="quiz-container">
+  <div *ngIf="quizStep === 'start'" class="start-screen">
+    <h1>Descubra seu Ford ideal</h1>
+    <p>Responda algumas perguntas rápidas e veja qual modelo combina com você!</p>
+    <button (click)="comecarQuiz()" class="btn p-2 btn-outline-primary">Começar</button>
   </div>
 
-  <!-- Perguntas -->
-  <div *ngIf="typeof quizStep === 'number'" class="w-100">
-    <h4 class="text-center mb-4">{{ perguntas[quizStep].texto }}</h4>
+  <div *ngIf="quizStep !== 'start' && quizStep !== 'result'" class="question-screen">
+    <h2>Pergunta {{ quizStep + 1 }} de {{ perguntas.length }}</h2>
+    <p class="question-text">{{ perguntas[quizStep].texto }}</p>
 
-    <div class="row justify-content-center">
-      <div
-        *ngFor="let opcao of perguntas[quizStep].opcoes; let i = index"
-        class="col-6 col-md-4 mb-3 text-center border rounded p-3"
-        [class.border-primary]="respostaAtiva(opcao, quizStep)"
-        style="cursor: pointer;"
-        (click)="selecionarResposta(opcao, quizStep)"
-      >
-        <img
-          *ngIf="perguntas[quizStep].imagens && perguntas[quizStep].imagens[i]"
-          [src]="'assets/imgs/' + perguntas[quizStep].imagens[i]"
-          [alt]="opcao"
-          class="img-fluid mb-2"
-          style="max-height: 100px; object-fit: contain;"
-        />
-        <div>{{ opcao }}</div>
-      </div>
+    <div class="options">
+      <button
+        *ngFor="let opcao of perguntas[quizStep].opcoes"
+        [class.selected]="respostas[quizStep] === opcao"
+        (click)="selecionarResposta(opcao)">
+        {{ opcao }}
+      </button>
     </div>
 
-    <div class="d-flex justify-content-between mt-4">
-      <button class="btn btn-outline-primary" (click)="anterior()" [disabled]="quizStep === 0">Anterior</button>
-      <button class="btn btn-primary" (click)="proximo()">Próxima</button>
+    <div class="navigation-buttons">
+      <button (click)="voltar()" [disabled]="quizStep === 0">Anterior</button>
+      <button (click)="avancar()" [disabled]="respostas[quizStep] === null">Próxima</button>
     </div>
   </div>
 
-  <!-- Resultado -->
-  <div *ngIf="quizStep === 'result'" class="text-center p-4">
-    <h2 class="mb-4">Seu veículo Ford é:</h2>
-    <img [src]="resultadoImagem" alt="Resultado" class="img-fluid mb-4" style="max-height: 300px;">
-    <button class="btn btn-success btn-lg w-100">Compare com outros modelos</button>
-  </div>
+  <div *ngIf="quizStep === 'result'" class="result-screen">
+    <h2>Seu Ford é:</h2>
+    <h5>{{ modeloResultado }}</h5>
 
+    <img
+      *ngIf="modeloResultado"
+      [src]="imagensModelos[modeloResultado]"
+      [alt]="modeloResultado"
+      class="resultado-imagem text-center"
+    />
+
+    <button (click)="irParaComparacao()">Comparar veículos</button>
+    <button (click)="reiniciar()">Refazer quiz</button>
+  </div>
 </div>
