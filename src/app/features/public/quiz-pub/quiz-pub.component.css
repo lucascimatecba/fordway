@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* evitar scroll, ajustar se header/footer tiver */
+}
+
+.container {
+  height: 100vh;
+}
+
+.border-primary {
+  border-width: 2px !important;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
