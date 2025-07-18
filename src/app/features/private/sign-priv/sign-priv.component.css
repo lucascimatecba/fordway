@@ -1,0 +1,11 @@
+.cadastro-wrapper {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 2rem;
+}
+
+.cadastro-card {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+}

@@ -1,0 +1,87 @@
+<div class="cadastro-wrapper d-flex align-items-center justify-content-center">
+  <div class="position-absolute top-0 end-0 m-3">
+    <button mat-icon-button aria-label="Fechar login" (click)="voltarLogin()" class="text-secondary">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="cadastro-card p-4 rounded shadow">
+    <h4 class="text-center mb-4 text-primary">Cadastro de Colaborador</h4>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Nome de usuário</mat-label>
+        <input matInput formControlName="nome" />
+      </mat-form-field>
+
+      <small class="text-danger d-block text-center mb-3" *ngIf="submitted && form.controls['nome'].errors">
+        <ng-container *ngIf="form.controls['nome'].errors['required']">
+          O nome é obrigatório.
+        </ng-container>
+        <ng-container *ngIf="form.controls['nome'].errors['minlength']">
+          O nome deve ter pelo menos 3 caracteres.
+        </ng-container>
+      </small>
+
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Código-chave Ford</mat-label>
+        <input matInput formControlName="codigoChave" />
+      </mat-form-field>
+
+      <small class="text-danger d-block text-center mb-3" *ngIf="submitted && form.controls['codigoChave'].errors">
+        <ng-container *ngIf="form.controls['codigoChave'].errors['required']">
+          O código-chave é obrigatório.
+        </ng-container>
+        <ng-container *ngIf="form.controls['codigoChave'].errors['minlength'] || form.controls['codigoChave'].errors['maxlength']">
+          O código deve ter exatamente 10 caracteres.
+        </ng-container>
+      </small>
+
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <small class="text-danger d-block text-center mb-3" *ngIf="submitted && form.controls['email'].errors">
+        <ng-container *ngIf="form.controls['email'].errors['required']">
+          O e-mail é obrigatório.
+        </ng-container>
+        <ng-container *ngIf="form.controls['email'].errors['email']">
+          Formato de e-mail inválido.
+        </ng-container>
+      </small>
+
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Senha</mat-label>
+        <input matInput [type]="hideSenha ? 'password' : 'text'" formControlName="senha" />
+        <button mat-icon-button matSuffix (click)="hideSenha = !hideSenha" [attr.aria-label]="'Ocultar senha'" [attr.aria-pressed]="hideSenha">
+          <mat-icon>{{ hideSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <small class="text-danger d-block text-center mb-3" *ngIf="submitted && form.controls['senha'].errors">
+        <ng-container *ngIf="form.controls['senha'].errors['required']">
+          A senha é obrigatória.
+        </ng-container>
+        <ng-container *ngIf="form.controls['senha'].errors['minlength']">
+          A senha deve ter no mínimo 6 caracteres.
+        </ng-container>
+      </small>
+
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Confirmar Senha</mat-label>
+        <input matInput [type]="hideConfirmar ? 'password' : 'text'" formControlName="confirmarSenha" />
+        <button mat-icon-button matSuffix (click)="hideConfirmar = !hideConfirmar" [attr.aria-label]="'Ocultar confirmação'" [attr.aria-pressed]="hideConfirmar">
+          <mat-icon>{{ hideConfirmar ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <small class="text-danger d-block text-center mb-3" *ngIf="submitted && senhasNaoCoincidem()">
+        As senhas não coincidem.
+      </small>
+
+      <button mat-raised-button color="primary" class="w-100 p-4 mt-1" type="submit" [disabled]="form.invalid">
+        Cadastrar
+      </button>
+    </form>
+  </div>
+</div>
