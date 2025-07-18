@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     ).subscribe(event => {
       const currentUrl = event.urlAfterRedirects;
 
-      const isLogin = currentUrl.includes('/login');
+      const isLogin = currentUrl.includes('/login') || currentUrl.includes('cadastro');
       const isPrivado = currentUrl.includes('/dashboard') || currentUrl.includes('/home-priv');
 
       // Header privado só aparece em páginas internas da Ford

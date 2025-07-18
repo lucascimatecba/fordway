@@ -42,6 +42,10 @@ export class LoginPrivComponent {
     });
   }
 
+  irParaCadastro() {
+    this.router.navigate(['/cadastro']);
+  }
+
   voltarHome() {
     this.router.navigate(['/home']);
   }

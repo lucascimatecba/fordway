@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginPrivComponent } from './features/private/login-priv/login-priv.component';
 import { loginPrivGuard } from './core/guards/login-priv.guard';
+import { SignPrivComponent } from './features/private/sign-priv/sign-priv.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,10 @@ export const routes: Routes = [
     path: 'login',
     component: LoginPrivComponent,
     canActivate: [loginPrivGuard]
+  },
+  {
+    path: 'cadastro',
+    component: SignPrivComponent
   },
   {
     path: '',
