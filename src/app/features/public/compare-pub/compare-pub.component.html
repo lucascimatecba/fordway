@@ -1,1 +1,69 @@
-<p>compare-pub works!</p>
+<div class="container-fluid py-5 px-3 px-md-5 comparacao-wrapper">
+
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary mb-4">Comparação de Veículos</h2>
+
+    <div class="row justify-content-center g-3">
+      <div class="col-12 col-md-5">
+        <mat-form-field appearance="fill" class="w-100 custom-select">
+          <mat-label>Veículo 1</mat-label>
+          <mat-select [(value)]="veiculo1Selecionado">
+            <mat-option
+              *ngFor="let v of veiculos"
+              [value]="v"
+              [disabled]="veiculo2Selecionado?.nome === v.nome"
+            >
+              {{ v.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-5">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Veículo 2</mat-label>
+          <mat-select [(value)]="veiculo2Selecionado">
+            <mat-option
+              *ngFor="let v of veiculos"
+              [value]="v"
+              [disabled]="veiculo1Selecionado?.nome === v.nome"
+            >
+              {{ v.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 justify-content-center" *ngIf="veiculosSelecionadosValidos()">
+    <div class="col-12 col-md-6">
+      <div class="card shadow p-3 h-100">
+        <img [src]="veiculo1Selecionado.imagem" alt="{{ veiculo1Selecionado.nome }}" class="img-fluid rounded mb-3 mx-auto d-block" style="max-height: 180px; object-fit: contain;">
+        <h5 class="text-center fw-bold text-primary">{{ veiculo1Selecionado.nome }}</h5>
+        <div class="infos-grid mt-3">
+          <div *ngFor="let info of infos" class="info-cell">
+            <div class="small fw-bold text-muted">{{ info.label }}</div>
+            <div>{{ veiculo1Selecionado[info.campo] }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card shadow p-3 h-100">
+        <img [src]="veiculo2Selecionado.imagem" alt="{{ veiculo2Selecionado.nome }}" class="img-fluid rounded mb-3 mx-auto d-block" style="max-height: 180px; object-fit: contain;">
+        <h5 class="text-center fw-bold text-primary">{{ veiculo2Selecionado.nome }}</h5>
+        <div class="infos-grid mt-3">
+          <div *ngFor="let info of infos" class="info-cell">
+            <div class="small fw-bold text-muted">{{ info.label }}</div>
+            <div>{{ veiculo2Selecionado[info.campo] }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 text-center mt-5">
+      <button class="btn btn-outline-secondary" (click)="limparComparacao()">Limpar Comparação</button>
+    </div>
+  </div>
+</div>
