@@ -20,6 +20,9 @@
         <ng-container *ngIf="form.controls['nome'].errors['minlength']">
           O nome deve ter pelo menos 3 caracteres.
         </ng-container>
+        <ng-container *ngIf="form.controls['nome'].errors?.['nomeDuplicado']">
+          <div class="text-danger text-center">Este nome de usuário já está em uso.</div>
+        </ng-container>
       </small>
 
       <mat-form-field appearance="fill" class="w-100">
@@ -34,6 +37,9 @@
         <ng-container *ngIf="form.controls['codigoChave'].errors['minlength'] || form.controls['codigoChave'].errors['maxlength']">
           O código deve ter exatamente 10 caracteres.
         </ng-container>
+        <ng-container *ngIf="form.controls['codigoChave'].errors?.['codigoInvalido']">
+          <div class="text-danger text-center">Código-chave inválido.</div>
+        </ng-container>
       </small>
 
       <mat-form-field appearance="fill" class="w-100">
@@ -47,6 +53,9 @@
         </ng-container>
         <ng-container *ngIf="form.controls['email'].errors['email']">
           Formato de e-mail inválido.
+        </ng-container>
+        <ng-container *ngIf="form.controls['email'].errors?.['emailDuplicado']">
+          <div class="text-danger text-center">Este e-mail já está em uso.</div>
         </ng-container>
       </small>
 

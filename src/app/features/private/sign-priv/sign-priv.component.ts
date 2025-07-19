@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { ColaboradorService } from '../../../core/services/colaborador.service';
 
 @Component({
   selector: 'app-sign-priv',
@@ -30,6 +31,7 @@ export class SignPrivComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private colaboradorService: ColaboradorService
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -49,9 +51,36 @@ export class SignPrivComponent {
 
     if (this.form.invalid || this.senhasNaoCoincidem()) return;
 
-    console.log('Formulário enviado:', this.form.value);
-    // Atualizar para chamar service
+    const { nome, codigoChave, email, senha } = this.form.value;
+
+    this.colaboradorService.verificarEmail(email).subscribe((emailExiste) => {
+      if (emailExiste) {
+        this.form.controls['email'].setErrors({ emailDuplicado: true });
+        return;
+      }
+
+      this.colaboradorService.verificarNome(nome).subscribe((nomeExiste) => {
+        if (nomeExiste) {
+          this.form.controls['nome'].setErrors({ nomeDuplicado: true });
+          return;
+        }
+
+        this.colaboradorService.cadastrarColaborador({ nome, codigoChave, email, senha }).subscribe({
+          next: () => {
+            this.router.navigate(['/login']);
+          },
+          error: (err) => {
+            if (err.status === 401) {
+              this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
+            } else {
+              console.error('Erro inesperado:', err);
+            }
+          }
+        });
+      });
+    });
   }
+
 
   senhasNaoCoincidem(): boolean {
     return this.form.value.senha !== this.form.value.confirmarSenha;
