@@ -6,7 +6,15 @@ const app = express();
 
 app.use(cors());
 // app.use(express.urlencoded({ extended: true }));
-const colaboradores = [];
+const colaboradores = [
+  {
+    id: 1,
+    nome: "admin",
+    codigoChave: "FORD123456",
+    email: "admin@email.com",
+    senha: "123456"
+  },
+];
 
 const codigosValidos = ["FORD123456", "FORD789012", "FORD987654"];
 
@@ -25,17 +33,22 @@ app.post("/login", async (req, res) => {
             });
         }
 
-        if (nome !== "admin" || senha !== "123456") {
-            return res.status(401).json({
-                message: "O nome de usuário ou senha está incorreto ou não foi cadastrado!"
-            });
+        const colaborador = colaboradores.find(
+          c => c.nome === nome && c.senha === senha
+        );
+
+        if (!colaborador) {
+          return res.status(401).json({
+            message: "O nome de usuário ou senha está incorreto ou não foi cadastrado!"
+          });
         }
 
         return res.status(200).json({
-            id: 1,
-            nome: "admin",
-            email: "admin@email.com"
+          id: colaborador.id,
+          nome: colaborador.nome,
+          email: colaborador.email
         });
+
 
     } catch (error) {
         return res.status(500).json({
