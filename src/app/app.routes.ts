@@ -21,12 +21,17 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./features/public/public.routes').then(m => m.publicRoutes)
+      import('./features/auth/public.routes').then(m => m.publicRoutes)
   },
   {
     path: '',
     loadChildren: () =>
-      import('./features/private/private.routes').then(m => m.privateRoutes)
+      import('./features/auth/private.routes').then(m => m.privateRoutes)
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then(m => m.authRoutes)
   },
   {
     path: '**',

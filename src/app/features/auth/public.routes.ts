@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { HomePubComponent } from './home-pub/home-pub.component';
-import { QuizPubComponent } from './quiz-pub/quiz-pub.component';
-import { ComparePubComponent } from './compare-pub/compare-pub.component';
-import { TestdrivePubComponent } from './testdrive-pub/testdrive-pub.component';
+import { HomePubComponent } from '../public/home-pub/home-pub.component';
+import { QuizPubComponent } from '../public/quiz-pub/quiz-pub.component';
+import { ComparePubComponent } from '../public/compare-pub/compare-pub.component';
+import { TestdrivePubComponent } from '../public/testdrive-pub/testdrive-pub.component';
 import { authPubGuard } from '../../core/guards/auth-pub.guard';
 
 
