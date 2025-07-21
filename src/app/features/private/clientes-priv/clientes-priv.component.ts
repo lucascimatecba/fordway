@@ -31,7 +31,6 @@ export class ClientesPrivComponent {
   ];
 
   ngOnInit() {
-    // Exemplo estático; futuramente carregar via serviço/API
     this.abas[0].clientes = [
       { nome:'João',telefone:'(11)12345-6789',cpf:'000.000.000-00',cidade:'São Paulo',status:'nao_contatado'},
       { nome:'Maria',telefone:'(21)98765-4321',cpf:'111.111.111-11',cidade:'Rio',status:'nao_contatado'}
