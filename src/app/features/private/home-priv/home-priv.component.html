@@ -1,11 +1,42 @@
-<!-- Tela inicial com fundo e cartão de boas-vindas -->
-<div class="container bg-image-container d-flex align-items-center justify-content-center custom-container">
-  <div class="card custom-card">
-    <div class="card-header">
-      Sistema de Dados FORD
+<div class="home-wrapper d-flex justify-content-center align-items-center">
+  <div class="container">
+    <div class="text-center">
+      <h1 class="display-4 fw-bold text-primary mb-2">Sistema Interno FORD</h1>
+      <h4 class="text-secondary mb-5">Bem-vindo(a), <strong>{{ nomeUsuario }}</strong>!</h4>
     </div>
-    <div class="card-body">
-      <h5 class="card-title custom-title">Seja bem-vindo(a)!</h5>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-12 col-md-5">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title text-primary fw-bold text-center">Dashboard de Veículos</h5>
+              <p class="card-text mt-2">
+                Acesse o painel com os dados atualizados de veículos conectados da rede Ford.
+              </p>
+            </div>
+            <div class="mt-4 text-end">
+              <button class="btn btn-outline-primary" (click)="irParaDashboard()">Ir para o Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-5">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title text-primary fw-bold text-center">Área de Clientes</h5>
+              <p class="card-text mt-2">
+                Veja os dados dos interessados em realizar test-drives em veículos Ford.
+              </p>
+            </div>
+            <div class="mt-4 text-end">
+              <button class="btn btn-outline-primary" (click)="irParaClientes()">Ir para Clientes</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
+</div>

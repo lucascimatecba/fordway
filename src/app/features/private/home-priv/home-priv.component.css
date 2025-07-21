@@ -1,37 +1,47 @@
-.bg-image-container {
-  background-image: url('../../../../assets/ranger.png');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 100%;
-  height: calc(100vh - 100px);
+.home-wrapper {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  background-color: #f8f9fa;
 }
-.custom-card {
-  width: 60%;
-  min-height: 400px;
-  background-color: rgba(255, 255, 255, 0.475);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  border: solid 3px #d6d6d6ba;
-  border-radius: 0.5rem;
-  padding: 2rem;
+
+h1, h4 {
+  font-family: 'Poppins', sans-serif;
 }
-.custom-title {
+
+.card {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn {
   font-weight: 500;
-  font-size: 16px;
-  color: #214381f4;
-  text-shadow: 1px 1px 2px rgba(175, 174, 174, 0.521);
+  border-radius: 8px;
+  padding: 0.5rem 1.5rem;
 }
-.card-header {
-  border: 1px solid #27272779;
-  border-radius: 0.5rem;
-  font-size: 15px;
+
+.btn-primary {
+  background-color: #214381;
+  border-color: #214381;
 }
-@media screen and (max-width: 768px) {
-  .custom-card {
-    width: 95%;
-    min-height: 350px;
-    background-color: rgba(255, 255, 255, 0.322);
-    backdrop-filter: blur(2px);
-  }
+
+.btn-primary:hover {
+  background-color: #18315e;
+  border-color: #18315e;
+}
+
+.btn-outline-primary {
+  color: #214381;
+  border-color: #214381;
+}
+
+.btn-outline-primary:hover {
+  background-color: #214381;
+  color: white;
 }
