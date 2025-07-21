@@ -15,6 +15,6 @@ export class FeedbackDialogComponent {
   ) {}
 
   close(): void {
-    this.dialogRef.close(true); // opcional: pode retornar um valor
+    this.dialogRef.close(true);
   }
 }
