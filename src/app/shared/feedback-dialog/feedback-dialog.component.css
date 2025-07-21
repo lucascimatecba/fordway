@@ -1,0 +1,35 @@
+.dialog-container {
+  text-align: center;
+  padding: 2rem;
+  max-width: 400px;
+}
+
+.dialog-title {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.dialog-message {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.custom-button {
+  padding: 0.6rem 1.8rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  text-transform: none;
+  font-weight: 500;
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.custom-button:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}

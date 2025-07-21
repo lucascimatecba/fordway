@@ -1,0 +1,7 @@
+<div class="dialog-container">
+  <h2 class="dialog-title text-primary">{{ data.title }}</h2>
+  <p class="dialog-message">{{ data.message }}</p>
+  <button mat-flat-button color="primary" (click)="close()" class="custom-button">
+    {{ data.action || 'Fechar' }}
+  </button>
+</div>
