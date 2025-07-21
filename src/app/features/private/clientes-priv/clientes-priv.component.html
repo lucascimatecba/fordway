@@ -1,0 +1,50 @@
+<div class="clientes-wrapper container py-5">
+  <h2 class="text-primary mb-4">Área de Clientes</h2>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item" *ngFor="let aba of abas; let i = index">
+      <a
+        class="nav-link"
+        [class.active]="activeTab === i"
+        (click)="activeTab = i"
+        href="#"
+      >{{ aba.label }}</a>
+    </li>
+  </ul>
+
+  <div *ngFor="let aba of abas; let i = index" [hidden]="activeTab !== i">
+    <table class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th>Nome</th><th>Telefone</th><th>CPF</th><th>Cidade</th><th *ngIf="i===0">Contato</th><th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of aba.clientes">
+          <td>{{ c.nome }}</td>
+          <td>{{ c.telefone }}</td>
+          <td>{{ c.cpf }}</td>
+          <td>{{ c.cidade }}</td>
+          <td *ngIf="i===0">
+            <input type="checkbox" (change)="moverParaMarcados(c)" />
+          </td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                ⋮
+              </button>
+              <ul class="dropdown-menu">
+                <li *ngIf="i===1">
+                  <a class="dropdown-item" href="#" (click)="cancelarAgendamento(c)">Cancelar</a>
+                </li>
+                <li *ngIf="i===2 || i===1">
+                  <a class="dropdown-item" href="#" (click)="finalizarOuExcluir(c, i)">Excluir</a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

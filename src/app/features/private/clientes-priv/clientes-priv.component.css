@@ -1,0 +1,28 @@
+/* clientes-priv.component.css */
+.clientes-wrapper {
+  font-family: 'Poppins', sans-serif;
+}
+
+.nav-tabs .nav-link {
+  color: #555;
+  font-weight: 500;
+}
+.nav-tabs .nav-link.active {
+  color: #214381;
+  border-color: #214381 #214381 transparent;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.dropdown-menu {
+  min-width: 8rem;
+}
+
+@media (max-width: 768px) {
+  .table th, .table td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
