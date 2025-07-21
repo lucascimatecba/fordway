@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { ColaboradorService } from '../../../core/services/colaborador.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackDialogComponent } from '../../../shared/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-sign-priv',
@@ -18,6 +20,8 @@ import { ColaboradorService } from '../../../core/services/colaborador.service';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    FeedbackDialogComponent
   ],
   templateUrl: './sign-priv.component.html',
   styleUrls: ['./sign-priv.component.css']
@@ -31,7 +35,8 @@ export class SignPrivComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private colaboradorService: ColaboradorService
+    private colaboradorService: ColaboradorService,
+    private dialog: MatDialog
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -67,13 +72,30 @@ export class SignPrivComponent {
 
         this.colaboradorService.cadastrarColaborador({ nome, codigoChave, email, senha }).subscribe({
           next: () => {
-            this.router.navigate(['/login']);
+            const dialogRef = this.dialog.open(FeedbackDialogComponent, {
+              data: {
+                title: 'Cadastro realizado!',
+                message: 'Seu cadastro foi concluído com sucesso.',
+                action: 'Ir para login'
+              },
+              disableClose: true
+            });
+
+            dialogRef.afterClosed().subscribe(() => {
+              this.router.navigate(['/login']);
+            });
           },
           error: (err) => {
             if (err.status === 401) {
               this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
             } else {
-              console.error('Erro inesperado:', err);
+              this.dialog.open(FeedbackDialogComponent, {
+                data: {
+                  title: 'Erro no cadastro',
+                  message: 'Não foi possível concluir o cadastro. Tente novamente mais tarde.',
+                  action: 'Fechar'
+                }
+              });
             }
           }
         });
