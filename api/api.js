@@ -16,6 +16,8 @@ const colaboradores = [
   },
 ];
 
+const clientes = [];
+
 const codigosValidos = ["FORD123456", "FORD789012", "FORD987654"];
 
 app.use(express.json());
@@ -224,6 +226,32 @@ app.post("/colaboradores", (req, res) => {
     });
   }
 });
+
+app.post("/clientes", (req, res) => {
+  const { nome, telefone, cpf, cidade, data, hora } = req.body;
+
+  if (!nome || !telefone || !cpf || !cidade || !data || !hora) {
+    return res.status(400).json({ message: "Todos os campos são obrigatórios!" });
+  }
+
+  const novoCliente = {
+    nome,
+    telefone,
+    cpf,
+    cidade,
+    data,
+    hora,
+    status: "nao_contatado"
+  };
+
+  clientes.push(novoCliente);
+  return res.status(201).json({ message: "Cliente registrado com sucesso!", cliente: novoCliente });
+});
+
+app.get("/clientes", (req, res) => {
+  return res.status(200).json({ clientes });
+});
+
 
 app.get("/colaboradores/checar-nome", (req, res) => {
   const { nome } = req.query;
