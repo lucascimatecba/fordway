@@ -24,10 +24,26 @@
   </div>
 
   <ul class="list-unstyled components">
-    <li><a routerLink="/home-priv" (click)="toggleMenu()">Home</a></li>
-    <li><a routerLink="/dashboard" (click)="toggleMenu()">Dashboard</a></li>
-    <li><a routerLink="/clientes" (click)="toggleMenu()">Clientes</a></li>
+    <li>
+      <a routerLink="/home-priv" (click)="toggleMenu()">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/dashboard" (click)="toggleMenu()">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/clientes" (click)="toggleMenu()">
+        <mat-icon>groups</mat-icon>
+        <span>Clientes</span>
+      </a>
+    </li>
   </ul>
+
 </div>
 
 <!-- Sobreposição para fechar o menu ao clicar fora -->
