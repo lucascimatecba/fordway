@@ -19,7 +19,7 @@
 
 .h1 {
   color: rgb(19, 47, 159);
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 
 ::ng-deep .mat-form-field-outline {
