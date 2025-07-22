@@ -1,0 +1,12 @@
+<div class="dialog-container">
+  <h2 class="dialog-title text-primary">{{ data.title }}</h2>
+  <p class="dialog-message">{{ data.message }}</p>
+  <div class="button-group">
+    <button mat-flat-button color="primary" (click)="close(true)" class="custom-button">
+      {{ data.confirmText || 'Sim' }}
+    </button>
+    <button mat-flat-button color="warn" (click)="close(false)" class="custom-button">
+      {{ data.cancelText || 'Não' }}
+    </button>
+  </div>
+</div>
