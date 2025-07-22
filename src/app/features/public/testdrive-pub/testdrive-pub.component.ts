@@ -26,6 +26,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FeedbackDialogComponent } from '../../../shared/feedback-dialog/feedback-dialog.component';
 import moment from 'moment';
+import { ClientesPrivService } from '../../../core/services/clientes-priv.service';
 
 const MY_DATE_FORMATS = {
   parse: {
@@ -112,13 +113,15 @@ declare const bootstrap: any;
   templateUrl: './testdrive-pub.component.html',
   styleUrls: ['./testdrive-pub.component.css'],
 })
+
 export class TestdrivePubComponent {
   form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private clientesPrivService: ClientesPrivService
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -141,29 +144,19 @@ export class TestdrivePubComponent {
     this.router.navigate(['/home']);
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.valid) {
       const formValue = { ...this.form.value };
-
       formValue.data = moment(formValue.data).format('DD/MM/YYYY');
 
-      fetch("http://localhost:3001/clientes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formValue),
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Erro ao agendar.");
-        return res.json();
-      })
-      .then(data => {
+      try {
+        await this.clientesPrivService.adicionarCliente(formValue);
         this.abrirDialog('Sucesso', 'Agendamento realizado com sucesso!');
         this.form.reset();
-      })
-      .catch(err => {
+      } catch (err) {
         this.abrirDialog('Erro', 'Erro ao enviar agendamento.');
         console.error(err);
-      });
+      }
     }
   }
 }

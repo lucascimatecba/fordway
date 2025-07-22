@@ -51,56 +51,58 @@ export class SignPrivComponent {
     this.router.navigate(['/login']);
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
 
     if (this.form.invalid || this.senhasNaoCoincidem()) return;
 
     const { nome, codigoChave, email, senha } = this.form.value;
 
-    this.colaboradorService.verificarEmail(email).subscribe((emailExiste) => {
+    try {
+      const [emailExiste, nomeExiste] = await Promise.all([
+        this.colaboradorService.verificarEmail(email),
+        this.colaboradorService.verificarNome(nome)
+      ]);
+
       if (emailExiste) {
         this.form.controls['email'].setErrors({ emailDuplicado: true });
         return;
       }
 
-      this.colaboradorService.verificarNome(nome).subscribe((nomeExiste) => {
-        if (nomeExiste) {
-          this.form.controls['nome'].setErrors({ nomeDuplicado: true });
-          return;
-        }
+      if (nomeExiste) {
+        this.form.controls['nome'].setErrors({ nomeDuplicado: true });
+        return;
+      }
 
-        this.colaboradorService.cadastrarColaborador({ nome, codigoChave, email, senha }).subscribe({
-          next: () => {
-            const dialogRef = this.dialog.open(FeedbackDialogComponent, {
-              data: {
-                title: 'Cadastro realizado!',
-                message: 'Seu cadastro foi concluído com sucesso.',
-                action: 'Ir para login'
-              },
-              disableClose: true
-            });
+      await this.colaboradorService.cadastrarColaborador({ nome, codigoChave, email, senha });
 
-            dialogRef.afterClosed().subscribe(() => {
-              this.router.navigate(['/login']);
-            });
-          },
-          error: (err) => {
-            if (err.status === 401) {
-              this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
-            } else {
-              this.dialog.open(FeedbackDialogComponent, {
-                data: {
-                  title: 'Erro no cadastro',
-                  message: 'Não foi possível concluir o cadastro. Tente novamente mais tarde.',
-                  action: 'Fechar'
-                }
-              });
-            }
+      const dialogRef = this.dialog.open(FeedbackDialogComponent, {
+        data: {
+          title: 'Cadastro realizado!',
+          message: 'Seu cadastro foi concluído com sucesso.',
+          action: 'Ir para login'
+        },
+        disableClose: true
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+
+    } catch (error: any) {
+      if (error.code === 'permission-denied') {
+        this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
+      } else {
+        console.error('Erro no cadastro:', error);
+        this.dialog.open(FeedbackDialogComponent, {
+          data: {
+            title: 'Erro no cadastro',
+            message: 'Não foi possível concluir o cadastro. Tente novamente mais tarde.',
+            action: 'Fechar'
           }
         });
-      });
-    });
+      }
+    }
   }
 
 
