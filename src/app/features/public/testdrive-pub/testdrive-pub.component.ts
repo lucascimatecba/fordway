@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,8 +16,75 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { AfterViewInit } from '@angular/core';
-import * as bootstrap from 'bootstrap';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatMomentDateModule,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MomentDateAdapter
+} from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackDialogComponent } from '../../../shared/feedback-dialog/feedback-dialog.component';
+import moment from 'moment';
+
+const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+function diaUtilValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const data: Date | null = control.value;
+    if (!data) return { required: true };
+
+    let d: Date;
+    if (typeof (data as any).toDate === 'function') {
+      d = (data as any).toDate(); // Moment -> Date
+    } else {
+      d = data;
+    }
+
+    const diaSemana = d.getDay();
+    if (diaSemana === 0 || diaSemana === 6) {
+      return { diaInvalido: true };
+    }
+    return null;
+  };
+}
+
+function horaValidaValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const valor: string = control.value;
+    if (!valor) return { required: true };
+
+    const partes = valor.split(':');
+    if (partes.length !== 2) return { formatoInvalido: true };
+
+    const hora = Number(partes[0]);
+    const min = Number(partes[1]);
+
+    if (
+      isNaN(hora) ||
+      isNaN(min) ||
+      hora < 10 ||
+      hora > 16 ||
+      (hora === 16 && min > 0)
+    ) {
+      return { horaInvalida: true };
+    }
+
+    return null;
+  };
+}
+
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-testdrive-pub',
@@ -22,34 +97,44 @@ import * as bootstrap from 'bootstrap';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatDialogModule,
+    FeedbackDialogComponent
   ],
-  providers: [provideNgxMask()],
+  providers: [
+    provideNgxMask(),
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
   templateUrl: './testdrive-pub.component.html',
-  styleUrl: './testdrive-pub.component.css',
+  styleUrls: ['./testdrive-pub.component.css'],
 })
-export class TestdrivePubComponent implements AfterViewInit {
+export class TestdrivePubComponent {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private dialog: MatDialog
+  ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       telefone: ['', [Validators.required]],
       cpf: ['', [Validators.required]],
       cidade: ['', [Validators.required]],
+      data: [null, [Validators.required, diaUtilValidator()]],
+      hora: ['', [Validators.required, horaValidaValidator()]],
       aceite: [false, [Validators.requiredTrue]],
     });
   }
 
-  ngAfterViewInit(): void {
-    const carouselElement = document.querySelector('#carouselExample');
-    if (carouselElement) {
-      new bootstrap.Carousel(carouselElement, {
-        interval: 3000,
-        ride: 'carousel',
-        pause: false
-      });
-    }
+  abrirDialog(titulo: string, mensagem: string) {
+    this.dialog.open(FeedbackDialogComponent, {
+      data: { title: titulo, message: mensagem }
+    });
   }
 
   voltarHome() {
@@ -58,7 +143,27 @@ export class TestdrivePubComponent implements AfterViewInit {
 
   onSubmit() {
     if (this.form.valid) {
-      console.log('Dados enviados:', this.form.value);
+      const formValue = { ...this.form.value };
+
+      formValue.data = moment(formValue.data).format('DD/MM/YYYY');
+
+      fetch("http://localhost:3001/clientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formValue),
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Erro ao agendar.");
+        return res.json();
+      })
+      .then(data => {
+        this.abrirDialog('Sucesso', 'Agendamento realizado com sucesso!');
+        this.form.reset();
+      })
+      .catch(err => {
+        this.abrirDialog('Erro', 'Erro ao enviar agendamento.');
+        console.error(err);
+      });
     }
   }
 }
