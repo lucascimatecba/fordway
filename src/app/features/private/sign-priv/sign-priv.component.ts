@@ -90,7 +90,7 @@ export class SignPrivComponent {
       });
 
     } catch (error: any) {
-      if (error.code === 'permission-denied') {
+      if (error.message === 'Código-chave inválido') {
         this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
       } else {
         console.error('Erro no cadastro:', error);
