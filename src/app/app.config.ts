@@ -7,17 +7,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCB7i8a7LBBXkpE0IHgVFt25GIlMXpGTNo",
-  authDomain: "fordway-db.firebaseapp.com",
-  projectId: "fordway-db",
-  storageBucket: "fordway-db.appspot.com", // Corrigi o storageBucket
-  messagingSenderId: "349895643290",
-  appId: "1:349895643290:web:212747f03abe4f8002cf23"
-};
+const firebaseConfig = environment.firebaseConfig;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,3 +25,5 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth())
   ]
 };
+
+console.log('Firebase config carregado:', firebaseConfig);

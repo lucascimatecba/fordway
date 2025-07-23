@@ -41,8 +41,8 @@ export class DashboardPrivComponent implements OnInit {
   constructor(private dashboardService: DashboardPrivService) { }
 
   ngOnInit(): void {
-    this.dashboardService.getVehicle().subscribe((res) => {
-      this.vehicles = res.vehicles;
+    this.dashboardService.getVehicles().subscribe((res) => {
+      this.vehicles = res;
     });
 
     this.selectCarForms.controls.carId.valueChanges.subscribe((id) => {

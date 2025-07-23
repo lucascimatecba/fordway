@@ -1,22 +1,40 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { VeiculosAPI } from '../../shared/models/veiculo.model';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { from, map, catchError, of, Observable } from 'rxjs';
+import { Veiculo } from '../../shared/models/veiculo.model';
 import { VehicleData } from '../../shared/models/vehicleData.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardPrivService {
-  private readonly baseURL = 'http://localhost:3001';
+  constructor(private firestore: Firestore) {}
 
-  constructor(private http: HttpClient) { }
-
-  getVehicle(): Observable<VeiculosAPI> {
-    return this.http.get<VeiculosAPI> (`${this.baseURL}/vehicles`);
+  /** Retorna a lista de veículos cadastrados no Firestore */
+  getVehicles(): Observable<Veiculo[]> {
+    const vehiclesRef = collection(this.firestore, 'vehicles');
+    return from(getDocs(vehiclesRef)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }) as Veiculo)),
+      catchError(() => of([])) // retorna array vazio em caso de erro
+    );
   }
 
-  getVehicleData(vin: string): Observable<VehicleData> {
-    return this.http.post<VehicleData>(`${this.baseURL}/vehicleData`, { vin });
+  /** Busca dados adicionais de um veículo pelo VIN */
+  getVehicleData(vin: string): Observable<VehicleData | null> {
+    const vehicleDataQuery = query(
+      collection(this.firestore, 'vehicleData'),
+      where('vin', '==', vin)
+    );
+
+    return from(getDocs(vehicleDataQuery)).pipe(
+      map(snapshot => {
+        if (snapshot.empty) return null;
+        return snapshot.docs[0].data() as VehicleData;
+      }),
+      catchError(() => of(null)) // retorna null em caso de erro
+    );
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc, query, getDocs, updateDoc, deleteDoc  } from '@angular/fire/firestore';
+import { Cliente } from '../../shared/models/cliente.model';
 
 @Injectable({ providedIn: 'root' })
 export class ClientesPrivService {
@@ -18,8 +19,21 @@ export class ClientesPrivService {
     }
   }
 
-  async obterClientes() {
-    const querySnapshot = await getDocs(collection(this.firestore, 'clientes'));
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  async obterClientes(): Promise<Cliente[]> {
+    const q = query(collection(this.firestore, 'clientes'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data()['createdAt']?.toDate()
+    } as Cliente));
+  }
+
+  async atualizarStatusCliente(id: string, status: Cliente['status']): Promise<void> {
+    await updateDoc(doc(this.firestore, 'clientes', id), { status });
+  }
+
+  async excluirCliente(id: string): Promise<void> {
+    await deleteDoc(doc(this.firestore, 'clientes', id));
   }
 }
