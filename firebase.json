@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "./dist/fordway",
+    "public": "dist/fordway/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,7 +9,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "./dist/fordway/browser/index.html"
+        "destination": "/index.html"
       }
     ]
   }
