@@ -40,7 +40,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-# Arquivos de ambiente
-.env.local
-.env.*.local
