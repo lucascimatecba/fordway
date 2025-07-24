@@ -7,4 +7,5 @@ export interface Cliente {
   status: 'nao_contatado' | 'marcado' | 'finalizado';
   createdAt?: Date;
   agendamento?: string;
+  editandoAgendamento?: boolean;
 }

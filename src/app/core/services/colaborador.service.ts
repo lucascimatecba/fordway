@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, doc, setDoc, query, where, getDocs } from '@angular/fire/firestore';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { FirebaseError } from '@angular/fire/app';
-import { signInWithEmailAndPassword, onAuthStateChanged } from '@angular/fire/auth';
 
 interface Colaborador {
   nome: string;
@@ -15,15 +14,12 @@ interface Colaborador {
 @Injectable({ providedIn: 'root' })
 export class ColaboradorService {
 
-  constructor(
-    private firestore: Firestore,
-    private auth: Auth
-  ) {}
+  private firestore: Firestore = inject(Firestore);
+  private auth: Auth = inject(Auth);
 
-  // Verifica se o código-chave existe na coleção do Firebase
   async codigoChaveValido(codigo: string): Promise<boolean> {
     const q = query(
-      collection(this.firestore, 'codigosChave'),
+      collection(this.firestore, 'codigoChave'),
       where('valor', '==', codigo)
     );
     const querySnapshot = await getDocs(q);
@@ -35,20 +31,17 @@ export class ColaboradorService {
       const codigoValido = await this.codigoChaveValido(dados.codigoChave);
       if (!codigoValido) throw new Error('Código-chave inválido');
 
-      const nomeExiste = await this.verificarNome(dados.nome);
-      const emailExiste = await this.verificarEmail(dados.email);
-      if (nomeExiste || emailExiste) {
-        throw new Error(nomeExiste ? 'Nome já em uso' : 'Email já em uso');
-      }
+      const [nomeExiste, emailExiste] = await Promise.all([
+        this.verificarNome(dados.nome),
+        this.verificarEmail(dados.email)
+      ]);
 
-      // 1. Criar usuário
+      if (nomeExiste) throw new Error('Nome já em uso');
+      if (emailExiste) throw new Error('Email já em uso');
+
       const cred = await createUserWithEmailAndPassword(this.auth, dados.email, dados.senha!);
       const uid = cred.user.uid;
 
-      // 2. Fazer login com o usuário criado (força autenticação client)
-      await signInWithEmailAndPassword(this.auth, dados.email, dados.senha!);
-
-      // 3. Agora sim: gravar no Firestore
       await setDoc(doc(this.firestore, 'colaboradores', uid), {
         nome: dados.nome,
         codigoChave: dados.codigoChave,
@@ -58,24 +51,26 @@ export class ColaboradorService {
 
       return uid;
     } catch (error) {
+      console.error('Erro detalhado:', error);
       if (error instanceof FirebaseError) {
-        console.error('Erro Firebase:', error.code, error.message);
         throw this.getFriendlyErrorMessage(error.code);
       }
-      throw error;
+      throw typeof error === 'string' ? new Error(error) : error;
     }
   }
 
-  private getFriendlyErrorMessage(code: string): string {
+  private getFriendlyErrorMessage(code: string): Error {
     switch (code) {
-      case 'auth/email-already-in-use':
-        return 'Este e-mail já está em uso';
-      case 'auth/invalid-email':
-        return 'E-mail inválido';
-      case 'auth/weak-password':
-        return 'Senha muito fraca (mínimo 6 caracteres)';
-      default:
-        return 'Erro ao cadastrar usuário';
+          case 'auth/email-already-in-use':
+            return new Error('Este e-mail já está em uso');
+        case 'auth/invalid-email':
+            return new Error('E-mail inválido');
+        case 'auth/weak-password':
+            return new Error('Senha muito fraca (mínimo 6 caracteres)');
+        case 'permission-denied':
+            return new Error('Sem permissão para acessar o banco de dados');
+        default:
+            return new Error('Erro ao cadastrar usuário');
     }
   }
 

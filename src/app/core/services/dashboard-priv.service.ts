@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc
+} from '@angular/fire/firestore';
 import { from, map, catchError, of, Observable } from 'rxjs';
 import { Veiculo } from '../../shared/models/veiculo.model';
 import { VehicleData } from '../../shared/models/vehicleData.model';
@@ -10,31 +18,48 @@ import { VehicleData } from '../../shared/models/vehicleData.model';
 export class DashboardPrivService {
   constructor(private firestore: Firestore) {}
 
-  /** Retorna a lista de veículos cadastrados no Firestore */
   getVehicles(): Observable<Veiculo[]> {
     const vehiclesRef = collection(this.firestore, 'vehicles');
     return from(getDocs(vehiclesRef)).pipe(
       map(snapshot => snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
-      }) as Veiculo)),
-      catchError(() => of([])) // retorna array vazio em caso de erro
+        vehicle: doc.get('vehicle'),
+        volumetotal: doc.get('volumetotal'),
+        connected: doc.get('connected'),
+        softwareUpdates: doc.get('softwareUpdates'),
+        img: doc.get('img')
+      } as Veiculo))),
+      catchError(error => {
+        console.error('Error fetching vehicles:', error);
+        return of([]);
+      })
     );
   }
 
-  /** Busca dados adicionais de um veículo pelo VIN */
   getVehicleData(vin: string): Observable<VehicleData | null> {
+    if (!vin || vin.length < 17) return of(null);
+
     const vehicleDataQuery = query(
       collection(this.firestore, 'vehicleData'),
-      where('vin', '==', vin)
+      where('vin', '==', vin.toUpperCase())
     );
 
     return from(getDocs(vehicleDataQuery)).pipe(
       map(snapshot => {
         if (snapshot.empty) return null;
-        return snapshot.docs[0].data() as VehicleData;
+        const data = snapshot.docs[0].data();
+        return {
+          odometro: data['odometro'],
+          nivelCombustivel: data['nivelCombustivel'],
+          status: data['status'],
+          lat: data['lat'],
+          long: data['long']
+        } as VehicleData;
       }),
-      catchError(() => of(null)) // retorna null em caso de erro
+      catchError(error => {
+        console.error('Error fetching vehicle data:', error);
+        return of(null);
+      })
     );
   }
 }
