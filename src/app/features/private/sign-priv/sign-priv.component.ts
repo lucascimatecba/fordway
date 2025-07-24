@@ -20,8 +20,7 @@ import { FeedbackDialogComponent } from '../../../shared/feedback-dialog/feedbac
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule,
-    FeedbackDialogComponent
+    MatDialogModule
   ],
   templateUrl: './sign-priv.component.html',
   styleUrls: ['./sign-priv.component.css']

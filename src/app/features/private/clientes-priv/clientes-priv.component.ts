@@ -12,8 +12,7 @@ import { Cliente } from '../../../shared/models/cliente.model';
   imports: [
     CommonModule,
     FormsModule,
-    MatDialogModule,
-    FeedbackConfirmationComponent
+    MatDialogModule
   ],
   templateUrl: './clientes-priv.component.html',
   styleUrls: ['./clientes-priv.component.css']

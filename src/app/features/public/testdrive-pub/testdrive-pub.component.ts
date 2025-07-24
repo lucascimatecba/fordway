@@ -101,8 +101,7 @@ declare const bootstrap: any;
     NgxMaskDirective,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatDialogModule,
-    FeedbackDialogComponent
+    MatDialogModule
   ],
   providers: [
     provideNgxMask(),
