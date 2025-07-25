@@ -1,6 +1,21 @@
 <div class="clientes-wrapper container py-5">
   <h2 class="text-primary mb-4">Área de Clientes</h2>
 
+  <div class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Filtrar por cidade..."
+        [(ngModel)]="filtroCidade"
+        (input)="aplicarFiltros()"
+      >
+    </div>
+  </div>
+
   <div class="table-responsive">
     <table class="table table-striped align-middle">
       <thead>
@@ -15,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let c of clientes">
+        <tr *ngFor="let c of clientesFiltrados">
           <td>{{ c.nome }}</td>
           <td>{{ c.telefone }}</td>
           <td>{{ c.cpf }}</td>
@@ -37,8 +52,7 @@
             <input
               type="checkbox"
               [checked]="c.status === 'finalizado'"
-              (change)="marcarComoFinalizado(c)"
-              [disabled]="c.status === 'finalizado'"
+              (change)="c.status === 'finalizado' ? reabrirCliente(c) : marcarComoFinalizado(c)"
             />
           </td>
           <td>
@@ -54,6 +68,15 @@
               <ul class="dropdown-menu">
                 <li>
                   <a
+                    class="dropdown-item"
+                    href="#"
+                    (click)="c.status === 'finalizado' ? reabrirCliente(c) : marcarComoFinalizado(c); $event.preventDefault()"
+                  >
+                    {{ c.status === 'finalizado' ? 'Reabrir' : 'Finalizar' }}
+                  </a>
+                </li>
+                <li>
+                  <a
                     class="dropdown-item text-danger"
                     href="#"
                     (click)="excluirCliente(c); $event.preventDefault()"
@@ -67,5 +90,14 @@
         </tr>
       </tbody>
     </table>
+    <div *ngIf="clientesFiltrados.length === 0 && filtroCidade" class="alert alert-warning mt-3">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      Cidade "{{filtroCidade}}" não encontrada
+    </div>
+
+    <div *ngIf="clientes.length === 0 && !filtroCidade" class="alert alert-info mt-3">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      Nenhum cliente cadastrado ainda
+    </div>
   </div>
 </div>

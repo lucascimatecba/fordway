@@ -19,6 +19,8 @@ import { Cliente } from '../../../shared/models/cliente.model';
 })
 export class ClientesPrivComponent implements OnInit {
   clientes: Cliente[] = [];
+  clientesFiltrados: Cliente[] = [];
+  filtroCidade: string = '';
 
   constructor(
     private dialog: MatDialog,
@@ -26,30 +28,66 @@ export class ClientesPrivComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.carregarClientes();
+  }
+
+  async carregarClientes() {
     try {
       this.clientes = await this.clientesService.obterClientes();
+      this.aplicarFiltros();
     } catch (err) {
       console.error('Erro ao carregar clientes:', err);
     }
   }
 
+  aplicarFiltros() {
+    this.clientesFiltrados = this.filtroCidade
+      ? this.clientes.filter(c =>
+          c.cidade.toLowerCase().includes(this.filtroCidade.toLowerCase()))
+      : [...this.clientes];
+
+    this.clientesFiltrados.sort((a, b) => {
+      if (a.status === 'finalizado' && b.status !== 'finalizado') return 1;
+      if (a.status !== 'finalizado' && b.status === 'finalizado') return -1;
+
+      const cidadeCompare = a.cidade.localeCompare(b.cidade);
+      if (cidadeCompare !== 0) return cidadeCompare;
+
+      return a.nome.localeCompare(b.nome);
+    });
+  }
+
   async marcarComoFinalizado(cliente: Cliente) {
     const confirmado = await this.confirmarAcao(`Finalizar test-drive de ${cliente.nome}?`);
     if (!confirmado) return;
-    cliente.status = 'finalizado';
+
     try {
       await this.clientesService.atualizarStatusCliente(cliente.id!, 'finalizado');
+      await this.carregarClientes();
     } catch (err) {
       console.error('Erro ao atualizar status:', err);
+    }
+  }
+
+  async reabrirCliente(cliente: Cliente) {
+    const confirmado = await this.confirmarAcao(`Reabrir cliente ${cliente.nome}?`);
+    if (!confirmado) return;
+
+    try {
+      await this.clientesService.atualizarStatusCliente(cliente.id!, 'nao_contatado');
+      await this.carregarClientes();
+    } catch (err) {
+      console.error('Erro ao reabrir cliente:', err);
     }
   }
 
   async excluirCliente(cliente: Cliente) {
     const confirmado = await this.confirmarAcao(`Excluir ${cliente.nome}?`);
     if (!confirmado) return;
+
     try {
       await this.clientesService.excluirCliente(cliente.id!);
-      this.clientes = this.clientes.filter(c => c.id !== cliente.id);
+      await this.carregarClientes();
     } catch (err) {
       console.error('Erro ao excluir cliente:', err);
     }
@@ -66,9 +104,5 @@ export class ClientesPrivComponent implements OnInit {
     });
 
     return await dialogRef.afterClosed().toPromise();
-  }
-
-  remarcar(cliente: Cliente) {
-    cliente.editandoAgendamento = true;
   }
 }
