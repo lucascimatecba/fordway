@@ -29,6 +29,17 @@
   border-radius: 10px;
 }
 
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
 @media (max-width: 992px) {
   .login-custom {
     min-height: 100vh;

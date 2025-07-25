@@ -56,12 +56,9 @@ export class LoginPrivComponent {
       try {
         await this.authService.login(email, senha);
         this.router.navigate(['/home-priv']);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          this.mensagemErro = error.message;
-        } else {
-          this.mensagemErro = 'Erro desconhecido ao fazer login';
-        }
+      } catch (error: any) {
+        this.mensagemErro = error.message;
+        console.error('Erro no login:', error);
       }
     }
   }

@@ -30,7 +30,7 @@ export class LoginPrivService {
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         console.error('Código do erro Firebase:', error.code);
-        throw this.getFriendlyErrorMessage(error.code);
+        throw new Error(this.getFriendlyErrorMessage(error.code));
       }
       throw new Error('Erro desconhecido durante o login');
     }

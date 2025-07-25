@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { Auth, signInWithEmailAndPassword, signOut, UserCredential } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthPrivService {
@@ -14,20 +14,31 @@ export class AuthPrivService {
       const userDoc = await getDoc(doc(this.firestore, 'colaboradores', userCredential.user.uid));
 
       if (!userDoc.exists()) {
-        throw new Error('Usuário não encontrado');
+        await signOut(this.auth);
+        throw { code: 'auth/user-not-found', message: 'Usuário não encontrado no banco de dados' };
       }
 
       const usuario = {
-        id: userDoc.id,
+        uid: userCredential.user.uid,
         ...userDoc.data()
       };
 
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuario));
-    } catch (error) {
-      console.error('Erro no login:', error);
-      throw error;
+    } catch (error: any) {
+      console.error('Erro completo:', error);
+
+      if (error.code) {
+        if (error.code === 'auth/invalid-login-credentials') {
+          error.code = 'auth/wrong-password';
+        }
+
+        throw new Error(this.getFriendlyErrorMessage(error.code));
+      } else {
+        throw new Error(this.getFriendlyErrorMessage('default'));
+      }
     }
   }
+
 
   logout(): void {
     signOut(this.auth);
@@ -41,5 +52,22 @@ export class AuthPrivService {
 
   estaLogado(): boolean {
     return !!this.getUsuario();
+  }
+
+  private getFriendlyErrorMessage(code: string): string {
+    switch (code) {
+      case 'auth/invalid-email':
+        return 'Formato de e-mail inválido';
+      case 'auth/user-disabled':
+        return 'Sua conta foi desativada';
+      case 'auth/user-not-found':
+        return 'E-mail não cadastrado';
+      case 'auth/wrong-password':
+        return 'Senha incorreta';
+      case 'auth/too-many-requests':
+        return 'Muitas tentativas. Tente mais tarde';
+      default:
+        return 'Credenciais inválidas. Verifique seus dados.';
+    }
   }
 }

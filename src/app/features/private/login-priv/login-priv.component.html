@@ -37,7 +37,8 @@
               </button>
             </mat-form-field>
 
-            <div *ngIf="mensagemErro" class="text-danger">
+            <div *ngIf="mensagemErro" class="alert alert-danger p-2">
+              <mat-icon class="d-none d-sm-block">error_outline</mat-icon>
               {{ mensagemErro }}
             </div>
           </div>

@@ -9,7 +9,7 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill" class="w-100">
-        <mat-label>Nome de usuário</mat-label>
+        <mat-label>Nome</mat-label>
         <input matInput formControlName="nome" />
       </mat-form-field>
 
@@ -19,9 +19,6 @@
         </ng-container>
         <ng-container *ngIf="form.controls['nome'].errors['minlength']">
           O nome deve ter pelo menos 3 caracteres.
-        </ng-container>
-        <ng-container *ngIf="form.controls['nome'].errors?.['nomeDuplicado']">
-          <div class="text-danger text-center">Este nome de usuário já está em uso.</div>
         </ng-container>
       </small>
 

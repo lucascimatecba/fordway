@@ -31,12 +31,7 @@ export class ColaboradorService {
       const codigoValido = await this.codigoChaveValido(dados.codigoChave);
       if (!codigoValido) throw new Error('Código-chave inválido');
 
-      const [nomeExiste, emailExiste] = await Promise.all([
-        this.verificarNome(dados.nome),
-        this.verificarEmail(dados.email)
-      ]);
-
-      if (nomeExiste) throw new Error('Nome já em uso');
+      const emailExiste = await this.verificarEmail(dados.email);
       if (emailExiste) throw new Error('Email já em uso');
 
       const cred = await createUserWithEmailAndPassword(this.auth, dados.email, dados.senha!);
@@ -72,15 +67,6 @@ export class ColaboradorService {
         default:
             return new Error('Erro ao cadastrar usuário');
     }
-  }
-
-  async verificarNome(nome: string): Promise<boolean> {
-    const q = query(
-      collection(this.firestore, 'colaboradores'),
-      where('nome', '==', nome)
-    );
-    const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
   }
 
   async verificarEmail(email: string): Promise<boolean> {

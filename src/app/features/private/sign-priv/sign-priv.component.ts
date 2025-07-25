@@ -99,14 +99,11 @@ export class SignPrivComponent {
     const errorMessage = error?.message || error?.toString() || 'Erro desconhecido';
 
     this.form.controls['codigoChave'].setErrors(null);
-    this.form.controls['nome'].setErrors(null);
     this.form.controls['email'].setErrors(null);
 
     if (typeof error === 'string' || error instanceof Error) {
         if (errorMessage.includes('Código-chave inválido')) {
             this.form.controls['codigoChave'].setErrors({ codigoInvalido: true });
-        } else if (errorMessage.includes('Nome já em uso')) {
-            this.form.controls['nome'].setErrors({ nomeDuplicado: true });
         } else if (errorMessage.includes('Email já em uso')) {
             this.form.controls['email'].setErrors({ emailDuplicado: true });
         } else {

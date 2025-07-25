@@ -134,8 +134,11 @@ export class TestdrivePubComponent {
   }
 
   abrirDialog(titulo: string, mensagem: string) {
-    this.dialog.open(FeedbackDialogComponent, {
+    const dialogRef = this.dialog.open(FeedbackDialogComponent, {
       data: { title: titulo, message: mensagem }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      window.location.reload();
     });
   }
 
@@ -151,7 +154,7 @@ export class TestdrivePubComponent {
       try {
         await this.clientesPrivService.adicionarCliente(formValue);
         this.abrirDialog('Sucesso', 'Agendamento realizado com sucesso!');
-        this.form.reset();
+
       } catch (err) {
         this.abrirDialog('Erro', 'Erro ao enviar agendamento.');
         console.error(err);
