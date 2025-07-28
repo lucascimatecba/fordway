@@ -105,4 +105,29 @@ export class ClientesPrivComponent implements OnInit {
 
     return await dialogRef.afterClosed().toPromise();
   }
+
+  formatarTelefone(telefone: string): string {
+    if (!telefone) return '';
+    const limpo = telefone.replace(/\D/g, '');
+
+    if (limpo.length === 11) {
+      return limpo.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    }
+    if (limpo.length === 10) {
+      return limpo.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    }
+
+    return telefone;
+  }
+
+  formatarCPF(cpf: string): string {
+    if (!cpf) return '';
+    const limpo = cpf.replace(/\D/g, '');
+
+    if (limpo.length === 11) {
+      return limpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    return cpf;
+  }
 }

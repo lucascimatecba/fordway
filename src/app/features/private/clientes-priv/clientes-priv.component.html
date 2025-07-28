@@ -32,8 +32,8 @@
       <tbody>
         <tr *ngFor="let c of clientesFiltrados">
           <td>{{ c.nome }}</td>
-          <td>{{ c.telefone }}</td>
-          <td>{{ c.cpf }}</td>
+          <td>{{ formatarTelefone(c.telefone) }}</td>
+          <td>{{ formatarCPF(c.cpf) }}</td>
           <td>{{ c.cidade }}</td>
           <td>
             <span
