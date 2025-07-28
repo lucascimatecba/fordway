@@ -50,6 +50,7 @@
               <mat-label>Cidade</mat-label>
               <input matInput placeholder="Digite sua cidade" formControlName="cidade" />
               <mat-error *ngIf="form.get('cidade')?.hasError('required')">Cidade é obrigatória.</mat-error>
+              <mat-error *ngIf="form.get('cidade')?.hasError('minlength')">Mínimo 3 caracteres.</mat-error>
             </mat-form-field>
           </div>
 
@@ -66,8 +67,19 @@
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
 
-              <mat-error *ngIf="form.get('data')?.hasError('required')">Data é obrigatória.</mat-error>
-              <mat-error *ngIf="form.get('data')?.hasError('diaInvalido')">Data inválida. Escolha um dia entre segunda e sexta.</mat-error>
+              <mat-error *ngIf="form.get('data')?.hasError('required')">
+                Data é obrigatória.
+              </mat-error>
+              <mat-error *ngIf="form.get('data')?.hasError('dataPassada')">
+                Data inválida. Não é possível agendar para dias anteriores.
+              </mat-error>
+              <mat-error *ngIf="form.get('data')?.hasError('diaInvalido')">
+                Apenas dias úteis são permitidos (segunda a sexta).
+              </mat-error>
+              <mat-error *ngIf="form.get('data')?.hasError('hojeInvalido')">
+                Hoje só é possível agendar até as 16h.
+              </mat-error>
+
             </mat-form-field>
           </div>
 

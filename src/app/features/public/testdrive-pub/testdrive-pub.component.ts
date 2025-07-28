@@ -42,23 +42,42 @@ const MY_DATE_FORMATS = {
 
 function diaUtilValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const data: Date | null = control.value;
-    if (!data) return { required: true };
+    const valor: Date | null = control.value;
+    if (!valor) return { required: true };
 
-    let d: Date;
-    if (typeof (data as any).toDate === 'function') {
-      d = (data as any).toDate(); // Moment -> Date
+    let data: Date;
+    if (typeof (valor as any).toDate === 'function') {
+      data = (valor as any).toDate();
     } else {
-      d = data;
+      data = valor;
     }
 
-    const diaSemana = d.getDay();
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const dataSelecionada = new Date(data);
+    dataSelecionada.setHours(0, 0, 0, 0);
+
+    if (dataSelecionada < hoje) {
+      return { dataPassada: true };
+    }
+
+    const diaSemana = dataSelecionada.getDay();
     if (diaSemana === 0 || diaSemana === 6) {
       return { diaInvalido: true };
     }
+
+    const agora = new Date();
+    if (
+      dataSelecionada.getTime() === hoje.getTime() &&
+      agora.getHours() >= 16
+    ) {
+      return { hojeInvalido: true };
+    }
+
     return null;
   };
 }
+
 
 function horaValidaValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -126,7 +145,7 @@ export class TestdrivePubComponent {
       nome: ['', [Validators.required, Validators.minLength(3)]],
       telefone: ['', [Validators.required]],
       cpf: ['', [Validators.required]],
-      cidade: ['', [Validators.required]],
+      cidade: ['', [Validators.required, Validators.minLength(3)]],
       data: [null, [Validators.required, diaUtilValidator()]],
       hora: ['', [Validators.required, horaValidaValidator()]],
       aceite: [false, [Validators.requiredTrue]],
